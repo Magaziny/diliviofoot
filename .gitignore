@@ -18,8 +18,8 @@ dist-ssr
 !.env.example
 
 # Local data / uploads
-database.sqlite
-uploads/
+# database.sqlite
+# uploads/
 scratch/
 
 # Editor directories and files
