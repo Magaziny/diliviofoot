@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <!-- Фон круга -->
+  <circle cx="96" cy="96" r="90" fill="#FF4D1A"/>
+  
+  <!-- Корж пиццы -->
+  <circle cx="96" cy="96" r="78" fill="#F5C842"/>
+  
+  <!-- Соус -->
+  <circle cx="96" cy="96" r="66" fill="#CC2200"/>
+  
+  <!-- Сыр -->
+  <circle cx="96" cy="96" r="58" fill="#F5C842" opacity="0.85"/>
+  
+  <!-- Пепперони 1 -->
+  <circle cx="96" cy="72" r="10" fill="#8B1A00"/>
+  <circle cx="96" cy="72" r="7" fill="#CC2200"/>
+  
+  <!-- Пепперони 2 -->
+  <circle cx="75" cy="105" r="10" fill="#8B1A00"/>
+  <circle cx="75" cy="105" r="7" fill="#CC2200"/>
+  
+  <!-- Пепперони 3 -->
+  <circle cx="117" cy="105" r="10" fill="#8B1A00"/>
+  <circle cx="117" cy="105" r="7" fill="#CC2200"/>
+  
+  <!-- Зелень -->
+  <ellipse cx="88" cy="88" rx="5" ry="3" fill="#2E7D32" transform="rotate(30 88 88)"/>
+  <ellipse cx="104" cy="92" rx="5" ry="3" fill="#2E7D32" transform="rotate(-20 104 92)"/>
+  <ellipse cx="96" cy="118" rx="5" ry="3" fill="#2E7D32" transform="rotate(10 96 118)"/>
+  
+  <!-- Корочка (внешнее кольцо) -->
+  <circle cx="96" cy="96" r="78" fill="none" stroke="#E8A030" stroke-width="8"/>
+</svg>
