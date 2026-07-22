@@ -1,11 +1,7 @@
 import Database from 'better-sqlite3';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { DB_PATH } from './paths.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const db = new Database(path.join(__dirname, 'database.sqlite'));
+const db = new Database(DB_PATH);
 
 // Инициализация таблиц
 db.exec(`

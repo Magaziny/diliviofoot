@@ -3,9 +3,10 @@ import { authenticate } from './auth.js';
 import db from '../db.js';
 import multer from 'multer';
 import path from 'path';
+import { UPLOADS_DIR } from '../paths.js';
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
+  destination: (req, file, cb) => cb(null, UPLOADS_DIR),
   filename: (req, file, cb) => cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`)
 });
 const upload = multer({ storage });
