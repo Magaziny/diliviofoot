@@ -14,6 +14,15 @@ const Navbar = ({ cartCount, cartItems, onCartOpen, onSearchChange, user, onAuth
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [scrolled, setScrolled] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  
+  const [headerHeight, setHeaderHeight] = useState('auto');
+  const navContainerRef = React.useRef(null);
+
+  useEffect(() => {
+    if (navContainerRef.current && window.scrollY <= 50) {
+      setHeaderHeight(navContainerRef.current.offsetHeight);
+    }
+  }, [cartSubtotal, isMobile, settings]);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
@@ -41,13 +50,16 @@ const Navbar = ({ cartCount, cartItems, onCartOpen, onSearchChange, user, onAuth
   const customNavbarBg = hexToRgba(baseColor, currentOpacity);
 
   return (
-    <div style={{
-      position: 'sticky',
-      top: 0,
-      zIndex: 1000,
-      padding: scrolled ? '10px 0' : '0',
-      paddingTop: `calc(${scrolled ? '10px' : '0px'} + var(--safe-top))`,
-      transition: 'var(--transition)'
+    <div style={{ height: headerHeight, zIndex: 1000, position: 'relative' }}>
+      <div ref={navContainerRef} style={{
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        top: 0,
+        zIndex: 1000,
+        padding: scrolled ? '10px 0' : '0',
+        paddingTop: `calc(${scrolled ? '10px' : '0px'} + var(--safe-top))`,
+        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
     }}>
       <nav className="glass" style={{
         margin: scrolled ? (isMobile ? '0 10px' : '0 auto') : '0',
@@ -55,7 +67,7 @@ const Navbar = ({ cartCount, cartItems, onCartOpen, onSearchChange, user, onAuth
         borderRadius: scrolled ? 'var(--radius-lg)' : '0',
         padding: isMobile ? '8px 16px' : '12px 24px',
         boxShadow: scrolled ? '0 10px 30px rgba(0,0,0,0.1)' : 'none',
-        transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
         borderBottom: scrolled ? 'none' : '1px solid var(--gray-light)',
         ...(customNavbarBg ? { background: customNavbarBg } : {})
       }}>
@@ -252,12 +264,18 @@ const Navbar = ({ cartCount, cartItems, onCartOpen, onSearchChange, user, onAuth
           )}
         </div>
         {/* Loyalty Progress Bar */}
-        {!scrolled && (
+        <div style={{
+          overflow: 'hidden',
+          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+          maxHeight: scrolled ? '0px' : '150px',
+          opacity: scrolled ? 0 : 1,
+          marginTop: scrolled ? '0px' : '12px',
+          pointerEvents: scrolled ? 'none' : 'auto'
+        }}>
           <div style={{
-            marginTop: '12px',
             fontSize: '11px',
             fontWeight: 700,
-            transition: 'all 0.3s ease'
+            paddingBottom: scrolled ? '0px' : '4px'
           }}>
             {loyaltyProgress >= 100 ? (
               <div style={{ 
@@ -314,8 +332,9 @@ const Navbar = ({ cartCount, cartItems, onCartOpen, onSearchChange, user, onAuth
               </div>
             )}
           </div>
-        )}
+        </div>
       </nav>
+      </div>
     </div>
   );
 };
