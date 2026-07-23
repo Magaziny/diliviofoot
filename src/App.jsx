@@ -227,7 +227,7 @@ function App() {
 
   // IntersectionObserver: автоматически обновляем activeCategory при скролле
   useEffect(() => {
-    if (categories.length === 0) return;
+    if (categories.length === 0 || loading) return;
     const observers = [];
     categories.forEach(cat => {
       const el = document.getElementById(cat.id);
@@ -244,7 +244,7 @@ function App() {
       observers.push(observer);
     });
     return () => observers.forEach(o => o.disconnect());
-  }, [categories]);
+  }, [categories, loading]);
 
   // Фоновая синхронизация профиля пользователя для обновления бонусного баланса в реальном времени.
   // Зависимость [user?.id] — чтобы интервал НЕ пересоздавался при каждом обновлении данных профиля.
@@ -416,6 +416,7 @@ function App() {
         cartCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)} 
         cartItems={cartItems}
         onCartOpen={() => setIsCartOpen(true)}
+        searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         user={user}
         onAuthOpen={() => setIsAuthOpen(true)}
@@ -428,20 +429,24 @@ function App() {
       />
       
       <main style={{ paddingBottom: 'calc(100px + var(--safe-bottom))' }}>
-        <div className="container">
-          <Hero />
-        </div>
-        
-        <StoryBar products={products} onStoryClick={(id) => {
-          const product = products.find(p => p.id === id);
-          if (product) setSelectedProduct(product);
-        }} />
-        
-        <CategoryBar 
-          categories={categories}
-          activeCategory={activeCategory} 
-          setActiveCategory={scrollToCategory} 
-        />
+        {!searchQuery && (
+          <>
+            <div className="container">
+              <Hero />
+            </div>
+            
+            <StoryBar products={products} onStoryClick={(id) => {
+              const product = products.find(p => p.id === id);
+              if (product) setSelectedProduct(product);
+            }} />
+            
+            <CategoryBar 
+              categories={categories}
+              activeCategory={activeCategory} 
+              setActiveCategory={scrollToCategory} 
+            />
+          </>
+        )}
 
         <div className="container">
           {loading ? (

@@ -5,16 +5,12 @@ const CategoryBar = ({ categories = [], activeCategory, setActiveCategory }) => 
     <>
       <style>{`
         .category-bar-sticky {
+          position: -webkit-sticky;
           position: sticky;
-          top: 70px;
-          z-index: 999;
+          top: calc(var(--navbar-height, 85px) - 20px);
+          z-index: 998;
           padding: 10px 0;
           margin-bottom: 30px;
-        }
-        @media (max-width: 768px) {
-          .category-bar-sticky {
-            top: 130px;
-          }
         }
       `}</style>
       <div className="category-bar-sticky">

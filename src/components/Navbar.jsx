@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Truck, User, PartyPopper, Gift, Search, Sun, Moon, ShoppingBag } from 'lucide-react';
 import { API_HOST } from '../config';
 
-const Navbar = ({ cartCount, cartItems, onCartOpen, onSearchChange, user, onAuthOpen, onLogout, freePizzaThreshold = 5000, settings = {}, onTrackerOpen, theme, toggleTheme }) => {
+const Navbar = ({ cartCount, cartItems, onCartOpen, searchQuery, onSearchChange, user, onAuthOpen, onLogout, freePizzaThreshold = 5000, settings = {}, onTrackerOpen, theme, toggleTheme }) => {
   const brandName = settings.brand_name || 'Магазин';
   const currencySymbol = settings.currency_symbol || 'm';
   const loyaltyProgressLabel = settings.loyalty_progress_label || 'До бесплатной пиццы:';
@@ -19,21 +19,29 @@ const Navbar = ({ cartCount, cartItems, onCartOpen, onSearchChange, user, onAuth
   const navContainerRef = React.useRef(null);
 
   useEffect(() => {
-    if (navContainerRef.current && window.scrollY <= 50) {
-      setHeaderHeight(navContainerRef.current.offsetHeight);
-    }
-  }, [cartSubtotal, isMobile, settings]);
-
-  useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+       setScrolled(window.scrollY > 50);
+       if (navContainerRef.current) {
+         document.documentElement.style.setProperty('--navbar-height', `${navContainerRef.current.offsetHeight}px`);
+       }
+    };
+    
+    // Initialize
+    if (navContainerRef.current) {
+      if (window.scrollY <= 50) {
+        setHeaderHeight(navContainerRef.current.offsetHeight);
+      }
+      document.documentElement.style.setProperty('--navbar-height', `${navContainerRef.current.offsetHeight}px`);
+    }
+
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [cartSubtotal, isMobile, settings]);
 
   const total = cartItems?.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0;
 
@@ -158,7 +166,10 @@ const Navbar = ({ cartCount, cartItems, onCartOpen, onSearchChange, user, onAuth
 
           {/* Search */}
           <div style={{ position: 'relative', flex: isMobile ? '1' : '0 1 300px' }}>
-            <input type="text" placeholder="Поиск по меню..." onChange={(e) => onSearchChange(e.target.value)} style={{ width: '100%', padding: '12px 16px 12px 45px', borderRadius: 'var(--radius-md)', border: 'none', backgroundColor: 'var(--gray-light)', fontSize: '14px', outline: 'none' }} />
+            <input type="text" value={searchQuery || ''} placeholder="Поиск по меню..." onChange={(e) => {
+              onSearchChange(e.target.value);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }} style={{ width: '100%', padding: '12px 16px 12px 45px', borderRadius: 'var(--radius-md)', border: 'none', backgroundColor: 'var(--gray-light)', fontSize: '14px', outline: 'none', color: 'var(--white)' }} />
             <Search size={20} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--gray-text)' }} />
           </div>
 
